@@ -1,0 +1,58 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.3'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'org.johan.csg'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+compileJava {
+	options.compilerArgs = [
+			'-Amapstruct.defaultComponentModel=spring'
+	]
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.flywaydb:flyway-core'
+	implementation('com.itextpdf:itextpdf:5.5.13.1')
+	//implementation group: 'com.itextpdf', name: 'itext7-core', version: '7.1.14', ext: 'pom'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.0.Final'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	//runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly('com.h2database:h2')
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation "io.springfox:springfox-boot-starter:3.0.0"
+	compile "io.springfox:springfox-swagger-ui:3.0.0"
+}
+
+test {
+	useJUnitPlatform()
+}
+
+task copyWebApp(type: Copy) {
+	from 'src/main/webapp/build'
+	into 'build/resources/main/static/.'
+}
+
+compileJava.dependsOn copyWebApp
